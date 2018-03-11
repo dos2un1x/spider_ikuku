@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding:utf-8 -*-
 import config
 import hashlib
 import logging
@@ -87,6 +87,7 @@ def gzip_file(filename, data):
     f = gzip.open(path + filename, 'wb')
     try:
         f.write(data)
+        return True
     except Exception, e:
         logging.info(e)
         return False

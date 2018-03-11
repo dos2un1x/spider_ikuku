@@ -1,22 +1,22 @@
-# coding=utf-8
+# -*- coding:utf-8 -*-
 import logging
 
 from bs4 import BeautifulSoup
-from handle import config
-from handle import mysqldb
-from handle import logger
-from handle import crawl_url
-from handle import redisdb
+from handler import config
+from handler import mysqldb
+from handler import logger
+from handler import crawler_url
+from handler import redisdb
 
 cf = config.get_conf()
 db = mysqldb.mysqldb()
 rdb = redisdb.redisdb()
-logger.set_log('pages.log')
+logger.set_log('spider_index.log')
 
 
-def pages():
+def spider_index():
     try:
-        page = crawl_url.handle_url(cf.get('web', 'start_url'), 'byclass', 'paged')
+        page = crawler_url.chrome_crawler(cf.get('web', 'start_url'), 'byclass', 'paged')
         if page is not None:
             soup = BeautifulSoup(page, 'lxml')
             urls = soup.find('div', class_='paged')
@@ -29,6 +29,6 @@ def pages():
 
 
 if __name__ == '__main__':
-    logging.info('start pages spider')
-    pages()
-    logging.info('end pages spider')
+    logging.info('start spider index')
+    spider_index()
+    logging.info('end spider index')

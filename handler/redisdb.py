@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding:utf-8 -*-
 import logging
 import redis
 import config
@@ -15,21 +15,22 @@ class redisdb:
             return rpool
         except Exception, e:
             logging.info(e)
-            logging.info('redis connect error !')
+            return False
 
     def producers(self, queue, url):
         try:
             rconn = self.connect_redis()
-            # rconn.sadd(queue,url)
             rconn.lpush(queue, url)
+            return True
         except Exception, e:
             logging.info(e)
+            return False
 
     def consumers(self, queue):
         try:
             rconn = self.connect_redis()
-            # url = rconn.spop(queue)
             url = rconn.blpop(queue, 0)[1]
             return url
         except Exception, e:
             logging.info(e)
+            return False

@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding:utf-8 -*-
 import logging
 import random
 import time
@@ -20,33 +20,8 @@ apiUrl = "http://dynamic.goubanjia.com/dynamic/get/" + order + ".html";
 cf = config.get_conf()
 
 
-# 动态代理IP
-def AutoProxy(targetUrl):
-    while True:
-        try:
-            # 获取IP列表
-            res = urllib.urlopen(apiUrl).read().strip("\n");
-            # 按照\n分割获取到的IP
-            ips = res.split("\n");
-            # 随机选择一个IP
-            proxyip = random.choice(ips)
-            proxies = {'http': proxyip}
-            # 使用代理IP请求目标网址
-            if requests.get(targetUrl, proxies=proxies, timeout=2).status_code == 200:
-                logging.info('connect proxy ip is: ' + proxyip)
-                logging.info('ok targetUrl is: ' + targetUrl)
-                return proxyip
-                break
-        except Exception, e:
-            logging.info('timeout proxy ip is: ' + proxyip)
-            logging.info('error targetUrl is: ' + targetUrl)
-            logging.info(e)
-            pass
-        time.sleep(1)
-
-
 # selenium webdriver chrome 爬取页面url
-def handle_url(_url, _choose, _value):
+def chrome_crawler(_url, _choose, _value):
     # 设置浏览器headless及不加载图片
     chrome_options = Options()
     chrome_options.add_argument('--disable-gpu')
