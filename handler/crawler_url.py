@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import logging
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -36,31 +37,25 @@ def chrome_crawler(_url, _choose, _value):
         driver.set_page_load_timeout(cf.getint('web', 'page_load'))
     try:
         driver.get(_url)
-    except Exception, e:
+        # 显式等待（0.5秒查询一次，查询5秒，共查询10次）
+        # EC.presence_of_all_elements_located（复数形式，查到所有的通过）
+        # EC.presence_of_element_located（单数）
+        if cf.getboolean('web', 'driver_wait'):
+            try:
+                if _choose == 'byid':
+                    WebDriverWait(driver, cf.getint('web', 'wait_time'), 0.5).until(
+                        EC.presence_of_element_located((By.ID, _value)))
+                elif _choose == 'byclass':
+                    WebDriverWait(driver, cf.getint('web', 'wait_time'), 0.5).until(
+                        EC.presence_of_element_located((By.CLASS_NAME, _value)))
+                else:
+                    logging.info('please choose crawl conditions')
+                return driver.page_source
+            except TimeoutException:
+                logging.info('WebDriverWait exception url is: ' + _url)
+        else:
+            return driver.page_source
+    except WebDriverException, e:
         logging.info(e)
-        pass
-    # 显式等待（0.5秒查询一次，查询5秒，共查询10次）
-    # EC.presence_of_all_elements_located（复数形式，查到所有的通过）
-    # EC.presence_of_element_located（单数）
-    if cf.getboolean('web', 'driver_wait'):
-        try:
-            if _choose == 'byid':
-                WebDriverWait(driver, cf.getint('web', 'wait_time'), 0.5).until(
-                    EC.presence_of_element_located((By.ID, _value)))
-            elif _choose == 'byclass':
-                WebDriverWait(driver, cf.getint('web', 'wait_time'), 0.5).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, _value)))
-            else:
-                logging.info('please choose crawl conditions')
-            return driver.page_source
-        except TimeoutException:
-            logging.info('WebDriverWait exception url is: ' + _url)
-        finally:
-            driver.quit()
-    else:
-        try:
-            return driver.page_source
-        except Exception, e:
-            logging.info(e)
-        finally:
-            driver.quit()
+    finally:
+        driver.quit()
