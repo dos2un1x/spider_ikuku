@@ -46,7 +46,8 @@ def parser(html):
                 rdb.producers(cf.get('redis', 'down_queue'), url)
         except Exception, e:
             logging.info(e)
-            rdb.producers(cf.get('redis', 'html_queue'), html)
+            logging.info('error html is: ' + html)
+            # rdb.producers(cf.get('redis', 'html_queue'), html)
 
 
 def parser_html():

@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 from handler import tools
 import re
 
-source = tools.ungzip_file('link_8c84e42af50923ce8a5f083c93885966.htmls')
-# print source
+source = tools.ungzip_file('link_1ef05bd4194bbe885a89a6505f34e897.html')
+print source
 if source is not None:
     try:
         s = source.strip()

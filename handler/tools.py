@@ -8,11 +8,12 @@ import gzip
 
 cf = config.get_conf()
 path = cf.get('web', 'html_path')
+img_path = cf.get('web','img_path')
 
 
 def save_to_file(file_name, contents):
     try:
-        fh = open(path + file_name, 'wb')
+        fh = open(img_path + file_name, 'wb')
         fh.write(contents)
         fh.flush()
         fh.close()
@@ -24,7 +25,7 @@ def save_to_file(file_name, contents):
 
 def read_to_file(file_name):
     try:
-        fh = open(path + file_name, 'rb')
+        fh = open(img_path + file_name, 'rb')
         contents = fh.read()
         fh.close()
         return contents
