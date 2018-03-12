@@ -14,7 +14,9 @@ def save_to_file(file_name, contents):
     try:
         fh = open(path + file_name, 'wb')
         fh.write(contents)
+        fh.flush()
         fh.close()
+        return True
     except Exception, e:
         logging.info(e)
         return False

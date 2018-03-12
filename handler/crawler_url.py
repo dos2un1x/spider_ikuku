@@ -1,21 +1,12 @@
 # -*- coding:utf-8 -*-
 import logging
-import random
-import time
-import urllib
-
-import requests
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-
 import config
-
-order = "6fe364e27f29ff8e83f0cae046bd18c8";
-apiUrl = "http://dynamic.goubanjia.com/dynamic/get/" + order + ".html";
 
 cf = config.get_conf()
 

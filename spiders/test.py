@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 from handler import tools
 import re
 
-source = tools.ungzip_file('link_1e37b1faa6057996395484fc25d8ee0c.html')
-print source
+source = tools.ungzip_file('link_8c84e42af50923ce8a5f083c93885966.htmls')
+# print source
 if source is not None:
     try:
         s = source.strip()
@@ -21,10 +21,12 @@ if source is not None:
         s=re_br.sub('\n',s) #将br转换为换行
         s=re_comment.sub('',s) #去掉HTML注释
         s=blank_line.sub('\n',s) #去掉多余的空行
-        # print s
+        p = re.compile("<title>(.+?)<\/title>")
+        title = p.search(s)
+        print title.group(1)
         p1 = re.compile("src=\"(.+?)\"class=\"attachment-list-thumbwp-post-image\"")
         url1 = p1.search(s)
-        print 'url1 is : ' + url1.group(1)
+        print url1.group(1)
         p2 = re.compile("loadsrc=\"(.+?)\"")
         urls = p2.findall(s)
         for url in urls:
